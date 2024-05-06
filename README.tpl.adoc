@@ -1,0 +1,9 @@
+= Name of the presentation
+:author: [Presenters]
+
+[.lead]
+http://p.kodein.net/shortcode
+
+By: {author}.
+
+* http://youtu.be/code[date: event name]

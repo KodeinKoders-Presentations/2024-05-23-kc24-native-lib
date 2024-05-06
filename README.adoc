@@ -1,0 +1,15 @@
+= Kodein Koders CuP Template project
+
+This project is a template for a https://github.com/kosi-libs/CuP[Compose ur Pres] project with the https://github.com/KodeinKoders/Kodein-Themes[Kodein theme and design system].
+
+. Edit xref:settings.gradle.kts[settings.gradle.kts]:
+    - Change the name of your project (which will define the package of the compose Res class).
+. Edit xref:src/commonMain/kotlin/main.kt[src/commonMain/kotlin/main.kt]:
+    - Change the title of your presentation.
+. **Write your slides!**
+    - Write each slide in xref:src/commonMain/kotlin/slides/[src/commonMain/kotlin/slides/].
+    - Report them in order in xref:src/commonMain/kotlin/main.kt[src/commonMain/kotlin/main.kt].
+. Run your presentation:
+    - On desktop with the `./gradlew run` command.
+    - On the web with the `./gradlew wasmJsBrowserRun` command.
+. Delete this README.adoc and replace it with an updated xref:README.tpl.adoc[README.tpl.adoc].
