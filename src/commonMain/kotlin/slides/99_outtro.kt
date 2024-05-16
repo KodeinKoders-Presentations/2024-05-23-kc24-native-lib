@@ -9,8 +9,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import net.kodein.cup.Slide
-import net.kodein.theme.compose.KodeinLogo
 import net.kodein.theme.cup.kStyled
+import net.kodein.theme.cup.ui.KodeinLogo
 
 
 val outro by Slide {
@@ -37,7 +37,7 @@ val outro by Slide {
         color = MaterialTheme.colors.primary
     )
 
-    KodeinLogo(Modifier.height(32.dp))
+    KodeinLogo("Koders", Modifier.height(32.dp)) {}
 
     Spacer(Modifier.height(32.dp))
 

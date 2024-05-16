@@ -1,7 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "1.9.23"
-    id("org.jetbrains.compose") version "1.6.2"
-    id("net.kodein.cup") version "1.0.0-Beta-01"
+    kotlin("multiplatform") version "2.0.0-RC3"
+    kotlin("plugin.compose") version "2.0.0-RC3"
+    id("org.jetbrains.compose") version "1.6.10-rc01"
+    id("net.kodein.cup") version "1.0.0-Beta-03"
     id("net.kodein.gradle.resources.resource-files") version "1.0.0"
 }
 
@@ -36,13 +37,15 @@ cup {
 }
 
 kotlin {
+    applyDefaultHierarchyTemplate()
     sourceSets.commonMain {
         dependencies {
             implementation(cup.sourceCode)
-            implementation("net.kodein.themes:cup:2.0.0")
+            implementation("net.kodein.themes:cup:2.1.0")
 
             implementation(compose.material)
-            implementation("org.kodein.emoji:emoji-compose-m2:1.3.0")
+            implementation(cup.widgets.material)
+            implementation("org.kodein.emoji:emoji-compose-m2:1.5.0")
 
             implementation("io.github.alexzhirkevich:qrose:1.0.1")
         }

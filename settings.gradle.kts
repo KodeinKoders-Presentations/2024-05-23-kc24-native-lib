@@ -1,6 +1,6 @@
 
 // TODO: Change the name of your project here
-rootProject.name = "kodein-presentation-template"
+rootProject.name = "kc24-native-lib"
 
 pluginManagement {
     repositories {
