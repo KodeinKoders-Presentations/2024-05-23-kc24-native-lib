@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,23 +76,22 @@ val lotsOfTargets by Slide(
     }
 }
 
-val secp256k1Compile by Slide(
-    stepCount = 12
-) { step ->
+@Composable
+fun ColumnScope.secp256k1CompileSlide(step: Int) {
     Text("Kotlin/Native static C lib", style = MaterialTheme.typography.h2)
     Row {
         Text("Step 1: compile the lib", style = MaterialTheme.typography.h4)
-        KodeinAnimatedVisibility(step in 1..4) {
+        KodeinAnimatedVisibility(step in 1..5) {
             Text(" with autotools", style = MaterialTheme.typography.h4, softWrap = false)
         }
-        KodeinAnimatedVisibility(step in 5..8) {
+        KodeinAnimatedVisibility(step in 6..10) {
             Text(" with CMake", style = MaterialTheme.typography.h4, softWrap = false)
         }
-        KodeinAnimatedVisibility(step >= 9) {
+        KodeinAnimatedVisibility(step >= 11) {
             Text(" with other tools", style = MaterialTheme.typography.h4, softWrap = false)
         }
     }
-    KodeinAnimatedVisibility(step >= 9) {
+    KodeinAnimatedVisibility(step >= 11) {
         Text("Bazel, Gradle, Meson, Ninja, Premake, SCons, Tup, Waf")
     }
 
@@ -100,37 +100,6 @@ val secp256k1Compile by Slide(
     BulletPoints(
         Modifier.width(448.dp)
     ) {
-        BulletPoint {
-            Column {
-                Text("For Desktop / Server targets (easy!)")
-                KodeinAnimatedVisibility(step < 1) {
-                    Text(
-                        text = "Linux: x86_64\nMacos: arm64, x86_64\nMinGW: x86_64",
-                        style = MaterialTheme.typography.caption,
-                        fontFamily = JetBrainsMono,
-                        color = Color(KodeinColors.purple_light)
-                    )
-                }
-                KodeinAnimatedVisibility(step == 2) {
-                    KodeinSourceCode(rememberSourceCode("bash") {
-                        "./configure --host=\${HOST} && make"
-                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
-                }
-                KodeinAnimatedVisibility(step == 6) {
-                    KodeinSourceCode(rememberSourceCode("bash") {
-                        "cmake -DHOST=${'$'}HOST -DCMAKE_BUILD_TYPE=release && make"
-                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
-                }
-                KodeinAnimatedVisibility(step >= 10, horizontalAlignment = Alignment.Start) {
-                    KodeinAnimatedVisibility(step < 11) {
-                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(48.dp))
-                    }
-                    KodeinAnimatedVisibility(step >= 11) {
-                        Text("Figure it out!", color = Color(KodeinColors.light_purple))
-                    }
-                }
-            }
-        }
         BulletPoint {
             Column {
                 Text("For all Apple device targets")
@@ -142,7 +111,7 @@ val secp256k1Compile by Slide(
                         color = Color(KodeinColors.purple_light),
                     )
                 }
-                KodeinAnimatedVisibility(step == 3) {
+                KodeinAnimatedVisibility(step == 2) {
                     KodeinSourceCode(rememberSourceCode("bash") {
                         """
                             if [ ${'$'}{SDK} == "iphoneos" && "${'$'}ARCH" == "arm64" ]; then
@@ -154,9 +123,7 @@ val secp256k1Compile by Slide(
                             fi
                             export MACOSX_DEPLOYMENT_TARGET="10.4"
                             export CC=${'$'}(xcrun --find --sdk "${'$'}{SDK}" clang)
-                            export CXX=${'$'}(xcrun --find --sdk "${'$'}{SDK}" clang++)
                             export CFLAGS="${'$'}{HOST_FLAGS} -O3 -g3 -fembed-bitcode"
-                            export CXXFLAGS="${'$'}{HOST_FLAGS} -O3 -g3 -fembed-bitcode"
                             export LDFLAGS="${'$'}{HOST_FLAGS}"
                             
                             ./configure --host=${'$'}TARGET && make
@@ -175,16 +142,15 @@ val secp256k1Compile by Slide(
                                 -DCMAKE_TOOLCHAIN_FILE="ios-cmake/ios.toolchain.cmake" \
                                 -DPLATFORM=${'$'}PLATFORM \
                                 -DCMAKE_C_FLAGS="-std=c++11 -Wno-shorten-64-to-32" \
-                                -DCMAKE_CXX_FLAGS="-std=c++11 -Wno-shorten-64-to-32" 
                             make
                         """
                     }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
                 }
-                KodeinAnimatedVisibility(step >= 10, horizontalAlignment = Alignment.Start) {
-                    KodeinAnimatedVisibility(step < 11) {
-                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(48.dp))
+                KodeinAnimatedVisibility(step >= 12, horizontalAlignment = Alignment.Start) {
+                    KodeinAnimatedVisibility(step < 13) {
+                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(32.dp))
                     }
-                    KodeinAnimatedVisibility(step >= 11) {
+                    KodeinAnimatedVisibility(step >= 13) {
                         Text("Figure it out!", color = Color(KodeinColors.light_purple))
                     }
                 }
@@ -201,7 +167,7 @@ val secp256k1Compile by Slide(
                         color = Color(KodeinColors.purple_light)
                     )
                 }
-                KodeinAnimatedVisibility(step == 4) {
+                KodeinAnimatedVisibility(step == 3) {
                     KodeinSourceCode(rememberSourceCode("bash") {
                         """
                             TARGET=${'$'}SYS-linux-android
@@ -211,7 +177,6 @@ val secp256k1Compile by Slide(
                                 TOOLTARGET=arm-linux-androideabi
                             fi
                             export CC=${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/${'$'}TOOLCHAIN/bin/${'$'}{TARGET}21-clang
-                            export CXX=${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/${'$'}TOOLCHAIN/bin/${'$'}{TARGET}21-clang++
                             export LD=${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/${'$'}TOOLCHAIN/bin/${'$'}TOOLTARGET-ld
                             export AR=${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/${'$'}TOOLCHAIN/bin/${'$'}TOOLTARGET-ar
                             export AS=${'$'}ANDROID_NDK/toolchains/llvm/prebuilt/${'$'}TOOLCHAIN/bin/${'$'}TOOLTARGET-as
@@ -238,11 +203,93 @@ val secp256k1Compile by Slide(
                         """
                     }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
                 }
-                KodeinAnimatedVisibility(step >= 10, horizontalAlignment = Alignment.Start) {
-                    KodeinAnimatedVisibility(step < 11) {
-                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(48.dp))
+                KodeinAnimatedVisibility(step >= 12, horizontalAlignment = Alignment.Start) {
+                    KodeinAnimatedVisibility(step < 13) {
+                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(32.dp))
                     }
-                    KodeinAnimatedVisibility(step >= 11) {
+                    KodeinAnimatedVisibility(step >= 13) {
+                        Text("Figure it out!", color = Color(KodeinColors.light_purple))
+                    }
+                }
+            }
+        }
+        BulletPoint {
+            Column {
+                KodeinAnimatedVisibility(step in 0..4) {
+                    Text("For Desktop / Server targets")
+                }
+                KodeinAnimatedVisibility(step >= 5) {
+                    Text("For Windows & Mac")
+                }
+                KodeinAnimatedVisibility(step < 1) {
+                    Text(
+                        text = "Linux: x86_64\nMacos: arm64, x86_64\nMinGW: x86_64",
+                        style = MaterialTheme.typography.caption,
+                        fontFamily = JetBrainsMono,
+                        color = Color(KodeinColors.purple_light)
+                    )
+                }
+                KodeinAnimatedVisibility(step == 4) {
+                    KodeinSourceCode(rememberSourceCode("bash") {
+                        "./configure && make"
+                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
+                }
+                KodeinAnimatedVisibility(step == 9) {
+                    KodeinSourceCode(rememberSourceCode("bash") {
+                        "cmake -DCMAKE_BUILD_TYPE=release && make"
+                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
+                }
+                KodeinAnimatedVisibility(step >= 12, horizontalAlignment = Alignment.Start) {
+                    KodeinAnimatedVisibility(step < 13) {
+                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(32.dp))
+                    }
+                    KodeinAnimatedVisibility(step >= 13) {
+                        Text("Figure it out!", color = Color(KodeinColors.light_purple))
+                    }
+                }
+            }
+        }
+        BulletPoint(step >= 5) {
+            Column {
+                Text("For Linux")
+                KodeinAnimatedVisibility(step < 6) {
+                    KodeinSourceCode(rememberSourceCode("bash") {
+                        """
+                            KDEP="${'$'}HOME/.konan/dependencies/"
+                            LLVM="${'$'}KDEP/llvm-11.1.0-linux-x64-essentials/bin"
+                            TOOLCHAIN="${'$'}KDEP/x86_64-unknown-linux-gnu-gcc-8.3.0-glibc-2.19-kernel-4.9-2"
+                            SYSROOT="${'$'}TOOLCHAIN/x86_64-unknown-linux-gnu/sysroot"
+                            
+                            export CC="${'$'}LLVM/clang"
+                            export CFLAGS="--sysroot=${'$'}SYSROOT --gcc-toolchain=${'$'}TOOLCHAIN"
+                            export LD="${'$'}LLVM/lld"
+                            export LDFLAGS="--sysroot=${'$'}SYSROOT"
+
+                            ./configure && make
+                        """
+                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
+                }
+                KodeinAnimatedVisibility(step == 10) {
+                    KodeinSourceCode(rememberSourceCode("bash") {
+                        """
+                            KDEP="${'$'}HOME/.konan/dependencies/"
+                            LLVM="${'$'}KDEP/llvm-11.1.0-linux-x64-essentials/bin"
+                            TOOLCHAIN="${'$'}KDEP/x86_64-unknown-linux-gnu-gcc-8.3.0-glibc-2.19-kernel-4.9-2"
+                            SYSROOT="${'$'}TOOLCHAIN/x86_64-unknown-linux-gnu/sysroot"
+                            
+                            cmake -DCMAKE_BUILD_TYPE=release \
+                                -DCMAKE_C_COMPILER="${'$'}LLVM/clang" \
+                                -DCMAKE_SYSROOT="${'$'}SYSROOT" \
+                                -DCMAKE_C_FLAGS="--gcc-toolchain=${'$'}TOOLCHAIN"
+                            make
+                        """
+                    }, fontSize = 8.sp, modifier = Modifier.fillMaxWidth())
+                }
+                KodeinAnimatedVisibility(step >= 12, horizontalAlignment = Alignment.Start) {
+                    KodeinAnimatedVisibility(step < 13) {
+                        NotoImageEmoji(Emoji.MiddleFinger, Modifier.size(32.dp))
+                    }
+                    KodeinAnimatedVisibility(step >= 13) {
                         Text("Figure it out!", color = Color(KodeinColors.light_purple))
                     }
                 }
@@ -250,6 +297,37 @@ val secp256k1Compile by Slide(
         }
     }
 }
+
+val secp256k1Compile1 by Slide(stepCount = 5) { secp256k1CompileSlide(it) }
+val secp256k1Compile2 by Slide(stepCount = 10) { secp256k1CompileSlide(it + 4) }
+
+val linuxSysroot by Slide(
+    stepCount = 2
+) { step ->
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.padding(16.dp)) {
+            KodeinFadeAnimatedVisibility(step == 0, durationMillis = 800) {
+                NotoAnimatedEmoji(Emoji.Laughing, modifier = Modifier.size(96.dp))
+            }
+            KodeinFadeAnimatedVisibility(step >= 1, durationMillis = 800) {
+                NotoAnimatedEmoji(Emoji.ImpSmile, iterations = 1, stopAt = 0.76f, modifier = Modifier.size(96.dp))
+            }
+        }
+        KodeinAnimatedVisibility(visible = step >= 1, durationMillis = 1_000) {
+            Text(
+                text = kStyled { "Linux Kotlin/Native is linked against a custom sysroot (to avoid specific distribution system dependency)" },
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .background(Color(KodeinColors.purple_dark), RoundedCornerShape(8.dp))
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+            )
+        }
+    }
+}
+
 
 val secp256k1Def by PreparedSlide(
     stepCount = 2
@@ -591,7 +669,9 @@ val secp256k1Kotlin by PreparedSlide {
 val staticCLib = VerticalSlides(
     secp256k1Title,
     lotsOfTargets,
-    secp256k1Compile,
+    secp256k1Compile1,
+    linuxSysroot,
+    secp256k1Compile2,
     secp256k1Def,
     noDefUpdate,
     secp256k1KNative,
