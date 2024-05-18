@@ -7,7 +7,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.kodein.cup.PreparedSlide
@@ -137,7 +136,7 @@ val noJvmCommonization by Slide(
         }
         KodeinAnimatedVisibility(visible = step >= 2) {
             Spacer(Modifier.height(4.dp))
-            Text("(5 oct 2020)")
+            Text("Over 3 years ago (5 oct 2020)")
         }
     }
 }

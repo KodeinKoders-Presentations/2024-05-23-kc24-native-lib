@@ -6,7 +6,6 @@ import slides.*
 
 
 fun main() = cupApplication(
-    // TODO: Change title
     title = "KC24: Native lib"
 ) {
     KodeinPresentation(
@@ -14,7 +13,6 @@ fun main() = cupApplication(
     )
 }
 
-// TODO: Write your own slides!
 val presentationSlides = Slides(
     intro,
 
@@ -22,7 +20,13 @@ val presentationSlides = Slides(
     platforms,
     sha256platformAPIs,
     cLibs,
-    dynCLib,
+    dynamicCLib,
+    staticCLib,
+    // Cross-compilation
+    // Swift & CSharp platform lib
+    // JS
+    // JS emscriptem
+    // Conclusion
 
     kodeinActivities,
     outro

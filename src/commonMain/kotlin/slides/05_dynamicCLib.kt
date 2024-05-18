@@ -16,16 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.kodein.cup.PreparedSlide
 import net.kodein.cup.Slide
-import net.kodein.cup.sa.SourceCode
 import net.kodein.cup.sa.rememberSourceCode
 import net.kodein.cup.widgets.material.BulletPoints
 import net.kodein.theme.KodeinColors
 import net.kodein.theme.compose.Color
-import net.kodein.theme.compose.m2.Link
 import net.kodein.theme.cup.KodeinSourceCode
 import net.kodein.theme.cup.ui.KodeinAnimatedVisibility
 import net.kodein.theme.cup.ui.KodeinFadeAnimatedVisibility
-import net.kodein.theme.cup.ui.defaultKodeinAnimationDuration
 import org.kodein.emoji.Emoji
 import org.kodein.emoji.compose.NotoAnimatedEmoji
 import org.kodein.emoji.smileys_emotion.face_hand.Salute
@@ -148,7 +145,7 @@ val openSSLDef by PreparedSlide(
     stepCount = 5
 ) {
 
-    val sourceCode = rememberSourceCode("text") {
+    val sourceCode = rememberSourceCode("properties") {
         val pkg by marker(highlighted(1))
         val hdr by marker(highlighted(2))
         val cmp by marker(highlighted(3))
@@ -168,7 +165,7 @@ val openSSLDef by PreparedSlide(
     }
 
     slideContent { step ->
-        Text("Sha256: Kotlin/Native C API (Linux)", style = MaterialTheme.typography.h2)
+        Text("Kotlin/Native dynamic C lib", style = MaterialTheme.typography.h2)
         Text("Step 1: write a def file", style = MaterialTheme.typography.h4)
 
         Spacer(Modifier.height(16.dp))
@@ -192,7 +189,7 @@ val openSSLGradle by PreparedSlide {
     }
 
     slideContent {
-        Text("Sha256: Kotlin/Native C API (Linux)", style = MaterialTheme.typography.h2)
+        Text("Kotlin/Native dynamic C lib", style = MaterialTheme.typography.h2)
         Text("Step 2: configure generation", style = MaterialTheme.typography.h4)
 
         Spacer(Modifier.height(16.dp))
@@ -233,7 +230,7 @@ val openSSLKotlin by PreparedSlide(
     }
 
     slideContent { step ->
-        Text("Sha256: Kotlin/Native C API (Linux)", style = MaterialTheme.typography.h2)
+        Text("Kotlin/Native dynamic C lib", style = MaterialTheme.typography.h2)
         Text("Step 3: write Kotlin!", style = MaterialTheme.typography.h4)
 
         Spacer(Modifier.height(16.dp))
@@ -241,7 +238,7 @@ val openSSLKotlin by PreparedSlide(
         KodeinSourceCode(sourceCode, step, fontSize = 10.sp)
     }
 }
-val dynCLib = VerticalSlides(
+val dynamicCLib = VerticalSlides(
     dynamicOpenSSL,
     consistentLinuxABI,
     openSSLDef,

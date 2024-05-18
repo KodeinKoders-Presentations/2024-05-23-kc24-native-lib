@@ -37,7 +37,6 @@ cup {
 }
 
 kotlin {
-    applyDefaultHierarchyTemplate()
     sourceSets.commonMain {
         dependencies {
             implementation(cup.sourceCode)
