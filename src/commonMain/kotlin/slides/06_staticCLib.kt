@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,12 +31,16 @@ import net.kodein.theme.cup.KodeinSourceCode
 import net.kodein.theme.cup.kStyled
 import net.kodein.theme.cup.ui.KodeinAnimatedVisibility
 import net.kodein.theme.cup.ui.KodeinFadeAnimatedVisibility
+import net.kodein.theme.cup.ui.defaultKodeinAnimationDuration
 import org.kodein.emoji.Emoji
 import org.kodein.emoji.compose.NotoAnimatedEmoji
 import org.kodein.emoji.compose.NotoImageEmoji
+import org.kodein.emoji.compose.m2.TextWithNotoImageEmoji
 import org.kodein.emoji.people_body.hand_single_finger.MiddleFinger
+import org.kodein.emoji.smileys_emotion.face_hand.ThinkingFace
 import org.kodein.emoji.smileys_emotion.face_negative.ImpSmile
 import org.kodein.emoji.smileys_emotion.face_smiling.Laughing
+import org.kodein.emoji.symbols.warning.Warning
 import utils.VerticalSlides
 
 
@@ -666,6 +671,120 @@ val secp256k1Kotlin by PreparedSlide {
     }
 }
 
+val StaticCLibJniVsJna by Slide(
+    stepCount = 3
+) { step ->
+    Row {
+        ProvideTextStyle(MaterialTheme.typography.h2) {
+            KodeinAnimatedVisibility(step == 0) {
+                Text("JNI")
+            }
+            KodeinAnimatedVisibility(step >= 1) {
+                Text("JNA")
+            }
+            Text(" process")
+        }
+    }
+
+    Spacer(Modifier.height(16.dp))
+
+    BulletPoints(
+        animationDurationMillis = defaultKodeinAnimationDuration
+    ) {
+        BulletPoint {
+            Row {
+                Text("Compile native lib as a ")
+                KodeinAnimatedVisibility(step == 0) {
+                    Text("static")
+                }
+                KodeinAnimatedVisibility(step >= 1) {
+                    Text("dynamic")
+                }
+                Text(" lib.")
+            }
+        }
+        BulletPoint(step == 0) {
+            Text("Write JNI wrapper in C.")
+        }
+        BulletPoint(step == 0) {
+            Text("Compile JNI wrapper & native lib as a dynamic lib.")
+        }
+        BulletPoint {
+            Column {
+                Row {
+                    Text("Write Kotlin ")
+                    KodeinAnimatedVisibility(step == 0) {
+                        Text("JNI")
+                    }
+                    KodeinAnimatedVisibility(step >= 1) {
+                        Text("JNA")
+                    }
+                    Text(" façade.")
+                }
+                KodeinAnimatedVisibility(step >= 2) {
+                    TextWithNotoImageEmoji("${Emoji.Warning} Lots of trials and error...", style = MaterialTheme.typography.caption, fixedEmojiSize = true)
+                }
+            }
+        }
+        BulletPoint {
+            Column {
+                Text("Write Kotlin implementation using façade.")
+                KodeinAnimatedVisibility(step >= 2) {
+                    TextWithNotoImageEmoji("${Emoji.Warning} some performance loss...", style = MaterialTheme.typography.caption, fixedEmojiSize = true)
+                }
+            }
+        }
+    }
+}
+
+val combinedCInterop by Slide(
+    stepCount = 3
+) { step ->
+    Row {
+        NotoAnimatedEmoji(Emoji.ThinkingFace, iterations = 1, stopAt = 1f, modifier = Modifier.size(96.dp))
+        Text(
+            text = kStyled { "How about a unified Kotlin C-Interop that would work accross all targets (JVM & Native)?" },
+            fontSize = 18.sp,
+            modifier = Modifier
+                .padding(8.dp)
+                .background(Color(KodeinColors.orange_dark), RoundedCornerShape(8.dp))
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+        )
+    }
+    KodeinAnimatedVisibility(step >= 1) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            KodeinAnimatedVisibility(visible = step >= 2, durationMillis = 1_000) {
+                Text(
+                    text = kStyled { "No." },
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(Color(KodeinColors.purple_dark), RoundedCornerShape(8.dp))
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                )
+            }
+            Box(Modifier.padding(16.dp)) {
+                KodeinFadeAnimatedVisibility(step == 1, durationMillis = 800) {
+                    NotoAnimatedEmoji(Emoji.Laughing, modifier = Modifier.size(96.dp))
+                }
+                KodeinFadeAnimatedVisibility(step >= 2, durationMillis = 800) {
+                    NotoAnimatedEmoji(Emoji.ImpSmile, iterations = 1, stopAt = 0.76f, modifier = Modifier.size(96.dp))
+                }
+            }
+        }
+        KodeinAnimatedVisibility(step >= 2) {
+            Spacer(Modifier.height(8.dp))
+            Link("https://youtrack.jetbrains.com/issue/KT-39144") {
+                Text("KT-39144", fontSize = 24.sp)
+            }
+            Spacer(Modifier.height(4.dp))
+            Text("Almost 4 years ago (24 may 2020)")
+        }
+    }
+}
+
 val staticCLib = VerticalSlides(
     secp256k1Title,
     lotsOfTargets,
@@ -679,5 +798,7 @@ val staticCLib = VerticalSlides(
     secp256k1CompileJni,
     secp256k1GradleIntegration,
     secp256k1JNILoading,
-    secp256k1Kotlin
+    secp256k1Kotlin,
+    StaticCLibJniVsJna,
+    combinedCInterop
 )

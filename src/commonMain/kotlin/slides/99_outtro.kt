@@ -1,45 +1,63 @@
 package slides
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import IsOutro
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import net.kodein.cup.SLIDE_SIZE_16_9
 import net.kodein.cup.Slide
-import net.kodein.theme.cup.kStyled
+import net.kodein.theme.compose.m2.Link
 import net.kodein.theme.cup.ui.KodeinLogo
 
 
-val outro by Slide {
+val outro by Slide(
+    specs = { copy(size = SLIDE_SIZE_16_9) },
+    user = IsOutro
+) {
 
-    Text(
-        text = "Thank you!",
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.h1
-    )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(end = 256.dp)
+    ) {
+        Text(
+            text = "Thank you!",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h1
+        )
 
-    Text(
-        text = kStyled { "${+m}Event${-m} - Date" },
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.subtitle2,
-        fontWeight = FontWeight.Light
-    )
+        Spacer(Modifier.height(16.dp))
 
-    Spacer(Modifier.height(16.dp))
+        Text(
+            text = "Salomon BRYS",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.subtitle1,
+            color = MaterialTheme.colors.primary
+        )
 
-    Text(
-        text = "Presenter(s)",
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.subtitle1,
-        color = MaterialTheme.colors.primary
-    )
+        KodeinLogo("Koders", Modifier.height(32.dp)) {}
 
-    KodeinLogo("Koders", Modifier.height(32.dp)) {}
+        Spacer(Modifier.height(16.dp))
 
-    Spacer(Modifier.height(32.dp))
+        LinksToThisPresentation()
 
-    LinksToThisPresentation()
+        Spacer(Modifier.height(16.dp))
+
+        Row {
+            ProvideTextStyle(MaterialTheme.typography.caption) {
+                Text("(Made with ")
+                Link(
+                    text = "KodeinKoders/CuP",
+                    uri = "https://github.com/KodeinKoders/CuP"
+                )
+                Text(")")
+            }
+        }
+    }
+
 }

@@ -23,6 +23,7 @@ import net.kodein.cup.Slide
 import net.kodein.cup.widgets.material.BulletPoints
 import net.kodein.theme.KodeinColors
 import net.kodein.theme.compose.Color
+import net.kodein.theme.cup.kStyled
 import net.kodein.theme.cup.ui.KodeinAnimatedVisibility
 import org.kodein.emoji.Emoji
 import org.kodein.emoji.activities.arts_crafts.Knot
@@ -186,7 +187,7 @@ val staticOrDynamic by Slide(
                         }
                     }
                     Spacer(Modifier.height(8.dp))
-                    Text("Executable binary code:")
+                    Text(kStyled { "${+b}Executable${-b} binary code:" })
                     Column(
                         Modifier
                             .fillMaxWidth()
@@ -269,10 +270,10 @@ val staticOrDynamic by Slide(
                 ) {
                     BulletPoints {
                         BulletPoint {
-                            Text("Linked outside app")
+                            Text("Accessed at runtime")
                         }
                         BulletPoint {
-                            Text("provided by system")
+                            Text("Provided by system")
                         }
                         BulletPoint {
                             Text("May be reused")

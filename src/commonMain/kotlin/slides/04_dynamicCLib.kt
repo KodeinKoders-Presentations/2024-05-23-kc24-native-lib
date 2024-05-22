@@ -198,18 +198,13 @@ val openSSLGradle by PreparedSlide {
     }
 }
 
-val openSSLKotlin by PreparedSlide(
-    stepCount = 3
-) {
+val openSSLKotlin by PreparedSlide {
 
     val sourceCode = rememberSourceCode("kotlin") {
-        val adv by marker(highlighted(1))
-        val ex by marker(onlyShown(0..1))
-
         """
             private class Sha256OpenSSL : Digest {
                 val ctx = EVP_MD_CTX_new()
-                init { ${adv}EVP_DigestInit${ex}_ex2${X}${X}(ctx, EVP_sha256()${ex}, null${X}) }
+                init { EVP_DigestInit(ctx, EVP_sha256()) }
                 override val digestSize: Int get() = EVP_MD_get_size(EVP_sha256())
                 override fun update(input: ByteArray, inputOffset: Int, len: Int) {
                     input.usePinned { pinned ->
@@ -218,7 +213,7 @@ val openSSLKotlin by PreparedSlide(
                 }
                 override fun finalize(output: ByteArray, outputOffset: Int) {
                     output.usePinned { pinned ->
-                        ${adv}EVP_DigestFinal${ex}_ex${X}${X}(
+                        EVP_DigestFinal(
                             ctx, pinned.addressOf(outputOffset).reinterpret(), null
                         )
                     }

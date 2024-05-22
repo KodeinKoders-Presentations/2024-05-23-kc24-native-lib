@@ -31,45 +31,21 @@ import org.kodein.emoji.smileys_emotion.face_unwell.Vomit
 import utils.VerticalSlides
 
 
-val sha256commonAPI by PreparedSlide(
-    stepCount = 7
-) {
+val sha256commonAPI by PreparedSlide {
     val sourceCode = rememberSourceCode("kotlin") {
-        val declaration by marker(highlighted(1))
-        val content by marker(highlighted(2))
-        val expect by marker(hidden(0..2))
-        val factory by marker(highlighted(4))
-        val utils by marker(hidden(0..4))
-        val usage by marker(hidden(0..5))
-
         """
-            public ${declaration}interface Digest : AutoCloseable${X} {
-            ${content}    public val digestSize: Int
+            public interface Digest : AutoCloseable {
+                public val digestSize: Int
                 public fun update(input: ByteArray, inputOffset: Int, len: Int)
                 public fun finalize(output: ByteArray, outOffset: Int)
-                public fun reset()${X}
-            
-            ${factory}    public interface Factory {
-                    public fun create(): Digest
-                }${X}
-            }
-            ${expect}
-            public expect val Sha256: Digest.Factory${X}
-            ${utils}
-            public fun Digest.Factory.hash(input: ByteArray): ByteArray =
-                create().use { d ->
-                    d.update(input, 0, input.size)
-                    ByteArray(d.digestSize).apply { d.finalize(this, 0) }
-                }${X}
-            ${usage}
-            private val nameHash = Sha256.hash("Salomon BRYS")${X}
+                public fun reset()
         """
     }
 
-    slideContent { step ->
+    slideContent {
         Text("Sha256: Common Façade", style = MaterialTheme.typography.h2)
         Spacer(Modifier.height(8.dp))
-        KodeinSourceCode(sourceCode, step, fontSize = 10.sp)
+        KodeinSourceCode(sourceCode, fontSize = 10.sp)
     }
 }
 
@@ -87,13 +63,7 @@ val sha256jvm by PreparedSlide {
                 }
                 override fun reset() { digest.reset() }
                 override fun close() {}
-
-                object Factory : Digest.Factory {
-                    override fun create(): Digest = Sha256Jvm()
-                }
             }
-        
-            public actual val Sha256: Digest.Factory get() = Sha256Jvm.Factory
         """
     }
 
@@ -261,17 +231,13 @@ val sha256Apple by PreparedSlide(
 }
 
 val sha256Mingw by PreparedSlide(
-    stepCount = 6
+    stepCount = 3
 ) {
     val sourceCode = rememberSourceCode("kotlin") {
         val memory by marker(onlyShown(0))
-        val init by marker(onlyShown(1))
-        val size by marker(onlyShown(2..3))
-        val scope by marker(highlighted(3))
-        val inout by marker(onlyShown(4))
-        val reset by marker(onlyShown(5))
+        val size by marker(hidden(0))
+        val scope by marker(highlighted(2))
         val above by marker(hidden(0))
-        val below by marker(hidden(5))
 
         """
             private class Sha256Mingw : Digest() {
@@ -283,22 +249,6 @@ val sha256Mingw by PreparedSlide(
                     nativeHeap.free(algorithm)
                 }
             ${X}${above}    //...
-            ${X}${init}    private fun createHash() {
-                    BCryptCreateHash(
-                        hAlgorithm = algorithm.ptr,
-                        phHash = hash.ptr,
-                        pbHashObject = null, cbHashObject = 0u,
-                        pbSecret = null, cbSecret = 0u, dwFlags = 0u
-                    )
-                }
-                init {
-                    BCryptOpenAlgorithmProvider(
-                        phAlgorithm = algorithm.ptr,
-                        pszAlgId = "SHA256",
-                        pszImplementation = null, dwFlags = 0u
-                    )
-                    createHash()
-                }
             ${X}${size}    override val digestSize: Int by lazy {
                     ${scope}memScoped {${X}
                         val length = ${scope}alloc<UCHARVar>()${X}
@@ -313,32 +263,8 @@ val sha256Mingw by PreparedSlide(
                         )
                         length.value.toInt()
                     ${scope}}${X}
-                }
-            ${X}${inout}    override fun update(input: ByteArray, inputOffset: Int, len: Int) {
-                    input.usePinned { pinned ->
-                        BCryptHashData(hHash = hash.ptr,
-                            pbInput = pinned.addressOf(inputOffset).reinterpret(),
-                            cbInput = len.toUInt(), dwFlags = 0u
-                        )
-                    }
-                }
-                override fun finalize(output: ByteArray, outputOffset: Int) {
-                    output.usePinned { pinned ->
-                        BCryptFinishHash(hHash = hash.ptr,
-                            pbOutput = pinned.addressOf(outputOffset).reinterpret(),
-                            cbOutput = (output.size - outputOffset).toUInt(),
-                            dwFlags = 0u
-                        )
-                    }
-                }
-            ${X}${below}    //...
-            ${X}${reset}    override fun doReset() {
-                    BCryptDestroyHash(
-                        hHash = hash.ptr
-                    )
-                    createHash()
-                }
-            ${X}}
+                }${X}
+            }
         """
     }
 
