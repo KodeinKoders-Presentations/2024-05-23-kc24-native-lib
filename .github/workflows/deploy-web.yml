@@ -33,6 +33,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v3.1.0
       - name: Build site
         run: ./gradlew wasmJsBrowserDistribution
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v2
         with:
