@@ -39,6 +39,8 @@ val sha256commonAPI by PreparedSlide {
                 public fun update(input: ByteArray, inputOffset: Int, len: Int)
                 public fun finalize(output: ByteArray, outOffset: Int)
                 public fun reset()
+            }
+            public expect fun sha256(): Digest
         """
     }
 
